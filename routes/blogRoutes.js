@@ -16,10 +16,21 @@ routes.post("/add-blogs", tokenVerify, async (req, res) => {
   }
 });
 
-routes.get("/get-blogs", tokenVerify, async (req, res) => {
+routes.get("/get-our-blogs", tokenVerify, async (req, res) => {
   try {
     const { userId } = req.body;
     const blogList = await BlogModel.find({ userId }).sort({ createdAt: -1 });
+    res.status(200).send({ msg: "Blog List Retrived Successfully", blogList });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", message: error.message });
+  }
+});
+
+routes.get("/get-blogs", tokenVerify, async (req, res) => {
+  try {
+    const blogList = await BlogModel.find().sort({ createdAt: -1 });
     res.status(200).send({ msg: "Blog List Retrived Successfully", blogList });
   } catch (error) {
     res
